@@ -44,13 +44,18 @@ const signUp = async (req, res, next) => {
       { id: newUser._id, isAdmin: newUser.isAdmin },
       process.env.JWT_SECRET
     );
-    res.status(201).cookie('access_token', token, {
-      httpOnly: true,
-    }).json({
-      success: true,
-      message: "User Created SuccessFully",
-      rest,
-    });
+    res
+      .status(201)
+      .cookie("access_token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+      })
+      .json({
+        success: true,
+        message: "User Created SuccessFully",
+        rest,
+      });
   } catch (error) {
     next(error);
   }
@@ -102,9 +107,10 @@ const signIn = async (req, res) => {
     );
 
     res
-      .status(200)
-      .cookie('access_token', token, {
+      .cookie("access_token", token, {
         httpOnly: true,
+        secure: true,
+        sameSite: "None",
       })
       .json({
         success: true,
@@ -131,10 +137,10 @@ const google = async (req, res) => {
       const { password, ...rest } = user._doc;
       return res
         .status(200)
-        .cookie("access_token", token, { 
+        .cookie("access_token", token, {
           httpOnly: true,
-          secure: false,      // FALSE on localhost (not https)
-          sameSite: 'Lax' 
+          secure: true,
+          sameSite: "None",
         })
         .json({
           rest,
@@ -160,10 +166,10 @@ const google = async (req, res) => {
       );
       const { password, ...rest } = newUser._doc;
       return res
-      .status(200)
-      .cookie('access_token', token, {
-        httpOnly: true,
-      })
+        .status(200)
+        .cookie("access_token", token, {
+          httpOnly: true,
+        })
         .json({
           success: true,
           rest,
