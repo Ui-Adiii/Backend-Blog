@@ -3,7 +3,7 @@ import { v2 as cloudinary } from "cloudinary";
 
 const createPost = async (req, res) => {
   try {
-    if (!req.user) {
+    if (!req.user.isAdmin) {
       return res.status(403).json({
         success: false,
         message: "You are not allowed for create a post",
